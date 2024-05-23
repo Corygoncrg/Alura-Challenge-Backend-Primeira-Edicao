@@ -29,6 +29,7 @@ public class Video {
         this.url = dados.url();
         this.aberto = true;
         this.categoria = categoria;
+        categoria.getVideos().add(this);
     }
 
 

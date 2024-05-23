@@ -5,9 +5,11 @@ import alura.backend.challenge.edicao1.domain.dto.video.DadosAtualizacaoVideoDTO
 import alura.backend.challenge.edicao1.domain.dto.video.DadosCadastroVideoDTO;
 import alura.backend.challenge.edicao1.domain.dto.video.DadosDetalhadosVideoDTO;
 import alura.backend.challenge.edicao1.domain.dto.video.DadosListagemVideoDTO;
+import alura.backend.challenge.edicao1.domain.model.Categoria;
 import alura.backend.challenge.edicao1.domain.model.Video;
 import alura.backend.challenge.edicao1.domain.repository.CategoriaRepository;
 import alura.backend.challenge.edicao1.domain.repository.VideoRepository;
+import alura.backend.challenge.edicao1.domain.service.CategoriaService;
 import alura.backend.challenge.edicao1.infra.exception.ValidacaoException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +31,16 @@ public class VideoController {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired
+    CategoriaService categoriaService;
+
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar (@RequestBody @Valid DadosCadastroVideoDTO dados, UriComponentsBuilder uriBuilder) {
-        if (dados.categoria().getId() != null) {
-        var categoria = categoriaRepository.findById(dados.categoria().getId()).orElseThrow(() -> new ValidacaoException("Categoria não encontrada!"));
+        if (dados.categoria() != null) {
+            var categoriaDTO = categoriaService.obterPorId(dados.categoria().getId());
+            var categoria = new Categoria(categoriaDTO);
+//        var categoria = categoriaRepository.findById(dados.categoria()).orElseThrow(() -> new ValidacaoException("Categoria não encontrada!"));
         var video = new Video(dados, categoria);
         repository.save(video);
         var uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
@@ -73,6 +80,7 @@ public class VideoController {
     @PutMapping
     @Transactional
     public ResponseEntity atualizar (@RequestBody @Valid DadosAtualizacaoVideoDTO dados) {
+        var video = categoriaService.obterPorId(dados.id());
         var video = repository.getReferenceById(dados.id());
         video.atualizar(dados);
 

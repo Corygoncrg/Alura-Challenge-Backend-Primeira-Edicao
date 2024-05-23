@@ -1,6 +1,7 @@
 package alura.backend.challenge.edicao1.domain.model;
 
 
+import alura.backend.challenge.edicao1.domain.dto.categoria.CategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosAtualizacaoCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCadastroCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCategoria;
@@ -38,6 +39,12 @@ public class Categoria {
         this.id = dados.id();
         this.titulo = dados.titulo();
         this.cor = dados.cor();
+    }
+
+    public Categoria(CategoriaDTO categoria) {
+        this.id = categoria.id();
+        this.titulo = categoria.titulo();
+        this.cor = categoria.cor();
     }
 
     public void atualizar(DadosAtualizacaoCategoriaDTO dados) {
