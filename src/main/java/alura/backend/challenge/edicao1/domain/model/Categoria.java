@@ -5,6 +5,7 @@ import alura.backend.challenge.edicao1.domain.dto.categoria.CategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosAtualizacaoCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCadastroCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCategoria;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -27,6 +28,7 @@ public class Categoria {
     private String titulo;
     private String cor;
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Video> videos = new ArrayList<>();
 
     public Categoria(DadosCadastroCategoriaDTO dados) {
@@ -56,6 +58,10 @@ public class Categoria {
         }
 
     }
+    public Categoria(int id) {
+        this.id = (long) id;
+    }
+
 
 //    public void inativar() {
 //        this.ativa = false;

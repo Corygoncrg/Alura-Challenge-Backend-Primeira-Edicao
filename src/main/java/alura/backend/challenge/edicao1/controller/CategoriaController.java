@@ -4,10 +4,13 @@ import alura.backend.challenge.edicao1.domain.dto.categoria.DadosAtualizacaoCate
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosDetalhadosCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCadastroCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosListagemCategoriaDTO;
+import alura.backend.challenge.edicao1.domain.dto.video.VideoDTO;
 import alura.backend.challenge.edicao1.domain.model.Categoria;
 import alura.backend.challenge.edicao1.domain.model.Video;
 import alura.backend.challenge.edicao1.domain.repository.CategoriaRepository;
 import alura.backend.challenge.edicao1.domain.repository.VideoRepository;
+import alura.backend.challenge.edicao1.domain.service.CategoriaService;
+import alura.backend.challenge.edicao1.domain.service.VideoService;
 import alura.backend.challenge.edicao1.infra.exception.ValidacaoException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -19,13 +22,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("categorias")
 public class CategoriaController {
+
     @Autowired
     private CategoriaRepository repository;
+
+    @Autowired
+    private CategoriaService categoriaService;
+
     @Autowired
     private VideoRepository videoRepository;
+
+    @Autowired
+    private VideoService videoService;
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemCategoriaDTO>> listar(@PageableDefault(size = 10, sort = {"id"}) Pageable paginacao) {
@@ -33,11 +47,14 @@ public class CategoriaController {
         return ResponseEntity.ok(page);
     }
 
-//    @GetMapping("/{id}/videos")
-//    public ResponseEntity<Page<Categoria>> listarVideos(@PathVariable Long categoriaId, @PageableDefault(size = 10, sort = {"id"}) Pageable paginacao) {
-//        var videos = repository.encontrarVideosPorCategoria(categoriaId, paginacao);
-//        return ResponseEntity.ok(videos);
-//    }
+    @GetMapping("/{id}/videos/")
+        public ResponseEntity<List<VideoDTO>> listarVideosPorCategoria(@PathVariable @Valid Long id, @PageableDefault(size = 10, sort = {"id"}) Pageable paginacao) {
+        var listaVideos = videoRepository.findByCategoria(id).stream().map(v -> new VideoDTO(v.getId(), v.getTitulo(),
+                        v.getDescricao(), v.getUrl(), v.getAberto(), v.getCategoria()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(listaVideos);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity pesquisar(@PathVariable @Valid Long id) {

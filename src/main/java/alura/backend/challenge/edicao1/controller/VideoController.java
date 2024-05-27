@@ -80,9 +80,11 @@ public class VideoController {
     @PutMapping
     @Transactional
     public ResponseEntity atualizar (@RequestBody @Valid DadosAtualizacaoVideoDTO dados) {
-        var video = categoriaService.obterPorId(dados.id());
+        var categoriaDTO = categoriaService.obterPorId(dados.categoria().getId());
+        var categoria = new Categoria(categoriaDTO);
+        System.out.println(categoria);
         var video = repository.getReferenceById(dados.id());
-        video.atualizar(dados);
+        video.atualizar(dados, categoria);
 
         return ResponseEntity.ok (new DadosDetalhadosVideoDTO(video));
     }

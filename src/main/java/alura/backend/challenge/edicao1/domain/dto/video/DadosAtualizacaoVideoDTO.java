@@ -6,6 +6,6 @@ import jakarta.validation.constraints.NotNull;
 public record DadosAtualizacaoVideoDTO
         (@NotNull Long id, String descricao,
          String url,
-         Categoria categoriaId)
+         Categoria categoria)
 {
 }
