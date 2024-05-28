@@ -1,12 +1,11 @@
 package alura.backend.challenge.edicao1.controller;
 
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosAtualizacaoCategoriaDTO;
-import alura.backend.challenge.edicao1.domain.dto.categoria.DadosDetalhadosCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCadastroCategoriaDTO;
+import alura.backend.challenge.edicao1.domain.dto.categoria.DadosDetalhadosCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosListagemCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.video.VideoDTO;
 import alura.backend.challenge.edicao1.domain.model.Categoria;
-import alura.backend.challenge.edicao1.domain.model.Video;
 import alura.backend.challenge.edicao1.domain.repository.CategoriaRepository;
 import alura.backend.challenge.edicao1.domain.repository.VideoRepository;
 import alura.backend.challenge.edicao1.domain.service.CategoriaService;

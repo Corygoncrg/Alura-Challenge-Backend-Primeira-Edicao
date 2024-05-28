@@ -40,7 +40,6 @@ public class VideoController {
         if (dados.categoria() != null) {
             var categoriaDTO = categoriaService.obterPorId(dados.categoria().getId());
             var categoria = new Categoria(categoriaDTO);
-//        var categoria = categoriaRepository.findById(dados.categoria()).orElseThrow(() -> new ValidacaoException("Categoria não encontrada!"));
         var video = new Video(dados, categoria);
         repository.save(video);
         var uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
