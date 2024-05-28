@@ -76,6 +76,11 @@ public class VideoController {
         return ResponseEntity.ok(new DadosDetalhadosVideoDTO(video));
     }
 
+@GetMapping("/free")
+public ResponseEntity<Page<DadosListagemVideoDTO>> listarVideosGratis (@PageableDefault (size = 5, sort = {"id"}) Pageable paginacao) {
+        var page = repository.findTop5ByOrderByIdAsc(paginacao).map(DadosListagemVideoDTO::new);
+        return ResponseEntity.ok(page);
+}
 
     @PutMapping
     @Transactional

@@ -17,4 +17,5 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     @Query("select v from Video v join v.categoria c where c.id = :idCategoria")
     List<Video> findByCategoria(@Param("idCategoria") Long idCategoria);
 
+    Page<Video> findTop5ByOrderByIdAsc(Pageable paginacao);
 }

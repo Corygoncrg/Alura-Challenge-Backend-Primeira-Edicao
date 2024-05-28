@@ -4,7 +4,6 @@ package alura.backend.challenge.edicao1.domain.model;
 import alura.backend.challenge.edicao1.domain.dto.categoria.CategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosAtualizacaoCategoriaDTO;
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCadastroCategoriaDTO;
-import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCategoria;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,11 +36,6 @@ public class Categoria {
 
     }
 
-    public Categoria(DadosCategoria dados) {
-        this.id = dados.id();
-        this.titulo = dados.titulo();
-        this.cor = dados.cor();
-    }
 
     public Categoria(CategoriaDTO categoria) {
         this.id = categoria.id();
@@ -62,8 +56,4 @@ public class Categoria {
         this.id = (long) id;
     }
 
-
-//    public void inativar() {
-//        this.ativa = false;
-//    }
 }
