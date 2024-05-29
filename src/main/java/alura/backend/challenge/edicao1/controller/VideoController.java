@@ -11,6 +11,7 @@ import alura.backend.challenge.edicao1.domain.repository.CategoriaRepository;
 import alura.backend.challenge.edicao1.domain.repository.VideoRepository;
 import alura.backend.challenge.edicao1.domain.service.CategoriaService;
 import alura.backend.challenge.edicao1.infra.exception.ValidacaoException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("videos")
+@SecurityRequirement(name = "bearer-key")
+
 public class VideoController {
 
     @Autowired

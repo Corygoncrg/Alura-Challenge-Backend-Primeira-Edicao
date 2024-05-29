@@ -11,6 +11,7 @@ import alura.backend.challenge.edicao1.domain.repository.VideoRepository;
 import alura.backend.challenge.edicao1.domain.service.CategoriaService;
 import alura.backend.challenge.edicao1.domain.service.VideoService;
 import alura.backend.challenge.edicao1.infra.exception.ValidacaoException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("categorias")
+@SecurityRequirement(name = "bearer-key")
+
 public class CategoriaController {
 
     @Autowired
