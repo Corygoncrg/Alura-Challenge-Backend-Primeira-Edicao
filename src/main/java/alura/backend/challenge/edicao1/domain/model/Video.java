@@ -2,10 +2,12 @@ package alura.backend.challenge.edicao1.domain.model;
 
 import alura.backend.challenge.edicao1.domain.dto.video.DadosAtualizacaoVideoDTO;
 import alura.backend.challenge.edicao1.domain.dto.video.DadosCadastroVideoDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Table(name = "videos")
 @Entity(name = "Video")
@@ -23,7 +25,7 @@ public class Video {
     private Boolean aberto;
     @ManyToOne
     @JoinColumn(name = "categoria_id")
-    @JsonIgnore
+    @JsonManagedReference
 
     private Categoria categoria;
 

@@ -5,7 +5,6 @@ import alura.backend.challenge.edicao1.domain.model.Video;
 import alura.backend.challenge.edicao1.domain.repository.CategoriaRepository;
 import alura.backend.challenge.edicao1.domain.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
