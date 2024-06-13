@@ -1,16 +1,16 @@
 package alura.backend.challenge.edicao1.domain.service;
 
-import alura.backend.challenge.edicao1.domain.dto.video.VideoDTO;
+import alura.backend.challenge.edicao1.domain.dto.video.DadosAtualizacaoVideoDTO;
+import alura.backend.challenge.edicao1.domain.dto.video.DadosCadastroVideoDTO;
+import alura.backend.challenge.edicao1.domain.dto.video.DadosDetalhadosVideoDTO;
+import alura.backend.challenge.edicao1.domain.model.Categoria;
 import alura.backend.challenge.edicao1.domain.model.Video;
 import alura.backend.challenge.edicao1.domain.repository.CategoriaRepository;
 import alura.backend.challenge.edicao1.domain.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class VideoService {
@@ -20,24 +20,32 @@ public class VideoService {
 
     @Autowired
     private CategoriaRepository categoriaRepository;
-    public VideoDTO obterPorId(Long id) {
-        Optional<Video> categoria = repository.findById(id);
-        if (categoria.isPresent()) {
-            Video v = categoria.get();
-            return new VideoDTO(v.getId(), v.getTitulo(),
-                    v.getDescricao(), v.getUrl(), v.getAberto(), v.getCategoria());
-        }
-        return null;
+
+    @Autowired
+    private CategoriaService categoriaService;
+
+    public ResponseEntity<DadosDetalhadosVideoDTO> cadastrarComCategoria(DadosCadastroVideoDTO dados, UriComponentsBuilder uriBuilder) {
+        var categoriaDTO = categoriaService.obterPorId(dados.categoria().getId());
+        var categoria = new Categoria(categoriaDTO);
+        var video = new Video(dados, categoria);
+        repository.save(video);
+        var uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosDetalhadosVideoDTO(video));}
+
+    public ResponseEntity<DadosDetalhadosVideoDTO> cadastrarSemCategoria(DadosCadastroVideoDTO dados, UriComponentsBuilder uriBuilder) {
+        var categoria = categoriaRepository.getReferenceById(1L);
+        var video = new Video(dados, categoria);
+        repository.save(video);
+        var uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosDetalhadosVideoDTO(video));
     }
 
-    public List<VideoDTO> obterPorCategoria(Long id, Pageable paginacao){
-        return converteDados(categoriaRepository.findAllVideosByCategoriaId(id, paginacao));
-    }
+    public ResponseEntity<DadosDetalhadosVideoDTO> atualizar(DadosAtualizacaoVideoDTO dados) {
+        var categoriaDTO = categoriaService.obterPorId(dados.categoria().getId());
+        var categoria = new Categoria(categoriaDTO);
+        var video = repository.getReferenceById(dados.id());
+        video.atualizar(dados, categoria);
 
-    private List<VideoDTO> converteDados(List<Video> video) {
-        return video.stream()
-                .map(v -> new VideoDTO(v.getId(), v.getTitulo(),
-                        v.getDescricao(), v.getUrl(), v.getAberto(), v.getCategoria()))
-                .collect(Collectors.toList());
+        return ResponseEntity.ok (new DadosDetalhadosVideoDTO(video));
     }
 }

@@ -4,14 +4,11 @@ import alura.backend.challenge.edicao1.domain.dto.video.DadosAtualizacaoVideoDTO
 import alura.backend.challenge.edicao1.domain.dto.video.DadosCadastroVideoDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Table(name = "videos")
 @Entity(name = "Video")
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -54,5 +51,9 @@ public class Video {
 
     public void inativarVideo() {
         this.aberto = false;
+    }
+
+    public void setId(Long videoId) {
+        this.id = videoId;
     }
 }

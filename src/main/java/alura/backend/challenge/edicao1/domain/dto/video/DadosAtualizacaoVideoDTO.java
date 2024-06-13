@@ -4,7 +4,8 @@ import alura.backend.challenge.edicao1.domain.model.Categoria;
 import jakarta.validation.constraints.NotNull;
 
 public record DadosAtualizacaoVideoDTO
-        (@NotNull Long id, String descricao,
+        (@NotNull Long id,
+         String descricao,
          String url,
          Categoria categoria)
 {

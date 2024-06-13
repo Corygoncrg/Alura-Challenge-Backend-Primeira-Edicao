@@ -6,17 +6,14 @@ import alura.backend.challenge.edicao1.domain.dto.categoria.DadosAtualizacaoCate
 import alura.backend.challenge.edicao1.domain.dto.categoria.DadosCadastroCategoriaDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "categorias")
 @Entity(name = "Categoria")
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -56,4 +53,6 @@ public class Categoria {
         this.id = (long) id;
     }
 
+    public void setId(long l) {
+    }
 }

@@ -14,7 +14,10 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,6 +26,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Transactional
 @AutoConfigureJsonTesters
 class CategoriaControllerTestIT {
     @Autowired
@@ -38,6 +43,7 @@ class CategoriaControllerTestIT {
 
     @Test
     @DisplayName("Deveria devolver erro 400 quando informações invalidas")
+    @WithMockUser
     void cadastrarCenario1() throws Exception {
         var response = mvc.perform(post("/categorias")).andReturn().getResponse();
 
@@ -46,6 +52,7 @@ class CategoriaControllerTestIT {
 
     @Test
     @DisplayName("Deveria devolver erro 201 quando informações validas")
+    @WithMockUser
     void cadastrarCenario2() throws Exception {
         var dadosCategoria = new DadosCadastroCategoriaDTO("titulo", "#f1f2f2");
 

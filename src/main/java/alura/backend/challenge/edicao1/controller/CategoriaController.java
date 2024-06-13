@@ -59,7 +59,7 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity pesquisar(@PathVariable @Valid Long id) {
+    public ResponseEntity<DadosDetalhadosCategoriaDTO> pesquisar(@PathVariable @Valid Long id) {
         if (!repository.existsById(id)) {
             throw new ValidacaoException("Categoria não existente!");
         }

@@ -10,6 +10,7 @@ import alura.backend.challenge.edicao1.domain.model.Video;
 import alura.backend.challenge.edicao1.domain.repository.CategoriaRepository;
 import alura.backend.challenge.edicao1.domain.repository.VideoRepository;
 import alura.backend.challenge.edicao1.domain.service.CategoriaService;
+import alura.backend.challenge.edicao1.domain.service.VideoService;
 import alura.backend.challenge.edicao1.infra.exception.ValidacaoException;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -32,6 +33,9 @@ public class VideoController {
     private VideoRepository repository;
 
     @Autowired
+    private VideoService service;
+
+    @Autowired
     private CategoriaRepository categoriaRepository;
 
     @Autowired
@@ -39,21 +43,12 @@ public class VideoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar (@RequestBody @Valid DadosCadastroVideoDTO dados, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<DadosDetalhadosVideoDTO> cadastrar (@RequestBody @Valid DadosCadastroVideoDTO dados, UriComponentsBuilder uriBuilder) {
         if (dados.categoria() != null) {
-            var categoriaDTO = categoriaService.obterPorId(dados.categoria().getId());
-            var categoria = new Categoria(categoriaDTO);
-        var video = new Video(dados, categoria);
-        repository.save(video);
-        var uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
-        return ResponseEntity.created(uri).body(new DadosDetalhadosVideoDTO(video));
+            return service.cadastrarComCategoria(dados, uriBuilder);
         }
         else {
-            var categoria = categoriaRepository.getReferenceById(1L);
-            var video = new Video(dados, categoria);
-            repository.save(video);
-            var uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
-            return ResponseEntity.created(uri).body(new DadosDetalhadosVideoDTO(video));
+            return service.cadastrarSemCategoria(dados, uriBuilder);
         }
     }
 
@@ -78,22 +73,16 @@ public class VideoController {
         return ResponseEntity.ok(new DadosDetalhadosVideoDTO(video));
     }
 
-@GetMapping("/free")
-public ResponseEntity<Page<DadosListagemVideoDTO>> listarVideosGratis (@PageableDefault (size = 5, sort = {"id"}) Pageable paginacao) {
+    @GetMapping("/free")
+    public ResponseEntity<Page<DadosListagemVideoDTO>> listarVideosGratis (@PageableDefault (size = 5, sort = {"id"}) Pageable paginacao) {
         var page = repository.findTop5ByOrderByIdAsc(paginacao).map(DadosListagemVideoDTO::new);
         return ResponseEntity.ok(page);
-}
+    }
 
     @PutMapping
     @Transactional
     public ResponseEntity atualizar (@RequestBody @Valid DadosAtualizacaoVideoDTO dados) {
-        var categoriaDTO = categoriaService.obterPorId(dados.categoria().getId());
-        var categoria = new Categoria(categoriaDTO);
-        System.out.println(categoria);
-        var video = repository.getReferenceById(dados.id());
-        video.atualizar(dados, categoria);
-
-        return ResponseEntity.ok (new DadosDetalhadosVideoDTO(video));
+        return service.atualizar(dados);
     }
 
     @DeleteMapping("/{id}")
